@@ -22,7 +22,7 @@ class ContactsTest extends TestCase
 
         $this->assertEquals('Test Name', $contact->name);
         $this->assertEquals('test@email.com', $contact->email);
-        $this->assertEquals('05/14/1988', $contact->birthday);
+        $this->assertEquals('05/14/1988', $contact->birthday->format('m/d/Y'));
         $this->assertEquals('ABC String', $contact->company);
     }
 
@@ -58,6 +58,47 @@ class ContactsTest extends TestCase
         $this->assertInstanceOf(Carbon::class, Contact::first()->birthday);
         $this->assertCount(1, Contact::all());
         $this->assertEquals('05-14-1988', Contact::first()->birthday->format('m-d-Y'));
+    }
+
+    /** @test */
+    public function a_contact_can_be_retrieved()
+    {
+            $contact = factory(Contact::class)->create();
+
+            $response = $this->get('/api/contacts/' . $contact->id);
+            $response->assertJson([
+                'name' => $contact->name,
+                'email' => $contact->email,
+                'birthday' => $contact->birthday,
+                'company' => $contact->company,
+            ]);
+    }
+
+    /** @test */
+    public function a_contact_can_be_patched()
+    {
+        $this->withoutExceptionHandling();
+        $contact = factory(Contact::class)->create();
+
+        $response = $this->patch('/api/contacts/' . $contact->id, $this->data());
+
+        $contact = $contact->fresh();
+
+        $this->assertEquals('Test Name', $contact->name);
+        $this->assertEquals('test@email.com', $contact->email);
+        $this->assertEquals('05/14/1988', $contact->birthday->format('m/d/Y'));
+        $this->assertEquals('ABC String', $contact->company);
+    }
+
+    /** @test */
+    public function a_contact_can_be_deleted()
+    {
+        $this->withoutExceptionHandling();
+        $contact = factory(Contact::class)->create();
+
+        $response = $this->delete('/api/contacts/' . $contact->id);
+
+        $this->assertCount(0, Contact::all());
     }
 
     public function data()
