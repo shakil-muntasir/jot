@@ -7,7 +7,7 @@
             <InputField name="birthday" label="Birthday" :errors="errors" placeholder="MM/DD/YYYY" @update:field="form.birthday = $event"/>
 
             <div class="flex justify-end">
-                <button class="px-4 py-2 rounded border text-red-700 mr-5 hover:border-red-700">Cancel</button>
+                <button class="px-4 py-2 rounded border text-red-700 mr-5 hover:border-red-700" @click.prevent="$router.back()">Cancel</button>
                 <button class="bg-blue-500 px-4 py-2 rounded text-white hover:bg-blue-400">Add New Contact</button>
             </div>
         </form>
@@ -37,13 +37,13 @@
             submitForm: function () {
                 axios.post('/api/contacts', this.form)
                     .then(response => {
-
+                        this.$router.push(response.data.links.self);
                     })
                     .catch(errors => {
                         this.errors = errors.response.data.errors;
                     });
             }
-        }
+        },
     }
 </script>
 

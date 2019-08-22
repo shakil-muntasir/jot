@@ -12,7 +12,7 @@
     export default {
         name: "InputField",
         props: [
-            'name', 'label', 'placeholder', 'errors',
+            'name', 'label', 'placeholder', 'errors', 'data',
         ],
         data: function () {
             return {
@@ -46,6 +46,11 @@
                 }
             }
         },
+        watch: {
+            data: function (value) {
+                this.value = value;
+            }
+        }
     }
 </script>
 
