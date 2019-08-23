@@ -23,7 +23,7 @@
 
                     <p class="pt-12 text-gray-500 text-xs uppercase font-bold">General</p>
 
-                    <router-link to="/" class="flex items-center py-2 text-sm hover:text-blue-600">
+                    <router-link to="/contacts" class="flex items-center py-2 text-sm hover:text-blue-600">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
                              class="fill-current text-blue-600 w-5 h-5">
                             <path class="st0"
@@ -32,7 +32,7 @@
                         <div class="tracking-wide pl-3">Contacts</div>
                     </router-link>
 
-                    <router-link to="/" class="flex items-center py-2 text-sm hover:text-blue-600">
+                    <router-link to="/birthdays" class="flex items-center py-2 text-sm hover:text-blue-600">
                         <svg viewBox="0 0 24 24" class="fill-current text-blue-600 w-5 h-5">
                             <path fill-rule="evenodd"
                                   d="M12.1 6.8c1.2 0 2.1-1 2.1-2.1 0-.4-.1-.8-.3-1.1L12.1.5l-1.8 3.1c-.2.3-.3.6-.3 1 0 1.2 1 2.2 2.1 2.2zm6.4 3.1h-5.3V7.8h-2.1v2.1H5.8c-1.8 0-3.2 1.4-3.2 3.2v9.5c0 .6.5 1.1 1.1 1.1h16.9c.6 0 1.1-.5 1.1-1.1v-9.5c0-1.8-1.5-3.2-3.2-3.2zm1 11.7H4.7v-3.2c1 0 1.9-.4 2.5-1.1l1.2-1.1 1.1 1.1c1.4 1.4 3.8 1.4 5.2 0l1.1-1.1 1.1 1.1c.7.7 1.6 1.1 2.5 1.1v3.2h.1zm0-4.8c-.5 0-1-.2-1.4-.6l-2.3-2.3-2.3 2.3c-.8.8-2.1.8-2.9 0l-2.3-2.3L6 16.2c-.4.4-.9.6-1.4.6v-3.7c0-.6.5-1.1 1.1-1.1h12.7c.6 0 1.1.5 1.1 1.1v3.7z"
@@ -60,8 +60,10 @@
                     <div>
                         Contacts
                     </div>
-
-                    <UserCircle :name="user.name" />
+                    <div class="flex items-center">
+                        <SearchBar/>
+                        <UserCircle :name="user.name"/>
+                    </div>
 
                 </div>
                 <div class="flex flex-col flex-1 overflow-y-hidden">
@@ -73,11 +75,13 @@
 </template>
 
 <script>
+    import SearchBar from "./SearchBar";
     import UserCircle from "./UserCircle";
+
     export default {
         name: "App",
         components: {
-            UserCircle,
+            UserCircle, SearchBar
         },
         props: [
             'user',
@@ -87,8 +91,7 @@
                 (config) => {
                     if (config.method === 'get') {
                         config.url = config.url + '?api_token=' + this.user.api_token;
-                    }
-                    else{
+                    } else {
                         config.data = {
                             ...config.data,
                             api_token: this.user.api_token
